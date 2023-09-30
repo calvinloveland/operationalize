@@ -8,21 +8,44 @@
     <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
     <!-- Require PlantUML.js -->
     <script src="{{ url_for('static', filename='node_modules/@sakirtemel/plantuml.js/plantuml.js')}}"></script>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .input-container {
+        flex: 1;
+        margin-right: 20px;
+      }
+      .diagram-container {
+        flex: 1;
+      }
+    </style>
   </head>
   <body>
-    <img src="loading.png" id="plantuml-diagram" />
+    <div class="container">
+      <div class="input-container">
+        <form>
+          <textarea id="pumlContent" rows="10" cols="50" oninput="renderDiagram()"></textarea>
+          <br>
+        </form>
+      </div>
+      <div class="diagram-container">
+        <img src="loading.png" id="plantuml-diagram" />
+      </div>
+    </div>
     <script type="text/javascript">
-        plantuml.initialize('/app/node_modules/@sakirtemel/plantuml.js').then(() => {
+        function renderDiagram() {
             const element = document.getElementById('plantuml-diagram')
-            const pumlContent = `
-                @startuml
-                Bob -> Alice: Hello!
-                @enduml
-            `
+            const pumlContent = document.getElementById('pumlContent').value
             const url = plantuml.renderPng(pumlContent).then((blob) => {
                 element.src = window.URL.createObjectURL(blob)
             })
-        })
+        }
+        plantuml.initialize('/app/node_modules/@sakirtemel/plantuml.js')
+        renderDiagram();
     </script>
   </body>
 </html>
