@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
+{% extends "base_template.html %"}
+{% block head %}
+  {{ super()}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlantUML.js Basic Example</title>
     <!-- Require cheerpj dependency -->
     <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
     <!-- Require PlantUML.js -->
@@ -23,8 +22,8 @@
         flex: 1;
       }
     </style>
-  </head>
-  <body>
+{% endblock %}
+{% block content %}
     <div class="container">
       <div class="input-container">
         <form>
@@ -47,5 +46,4 @@
         plantuml.initialize('/app/node_modules/@sakirtemel/plantuml.js')
         renderDiagram();
     </script>
-  </body>
-</html>
+{% endblock %}

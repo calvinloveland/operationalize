@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>OPERATIONALIZE</title>
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        #header {
+            background-color: #2b2b2b;
+            padding: 10px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #f2f2f2;
+            margin: 10px 0;
+        }
+        #content {
+            padding: 10px;
+        }
+        #footer {
+            background-color: #2b2b2b;
+            padding: 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <div id="header">
+        {% block header %}
+        <h1>OPERATIONALIZE</h1>
+        <hr>
+        <div style="display: flex; justify-content: space-between;">
+            <span>Current task:</span> 
+            <span style="text-align: center;">Task timer:</span>
+            <span style="margin-left: auto;">Project timeline:</span>   
+        </div>
+        {% endblock %} 
+    </div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        A Calvin Loveland project.
+        {% endblock %}
+    </div>
+</body>
+</html>

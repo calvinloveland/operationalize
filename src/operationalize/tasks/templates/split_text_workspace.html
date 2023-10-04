@@ -1,0 +1,26 @@
+
+{% extends "base_template.html %"}
+{% block head %}
+  {{ super()}}
+  <style>
+    .text-input-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .text-input-container input {
+      flex: 1;
+      margin-right: 20px;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+    <!--Need two columns of text input-->
+    <div class="text-input-container">
+        <input type="text" name="workspace_output_1" placeholder="Text Input 1">
+    </div>
+    <div class="text-input-container">
+        <input type="text" name="workspace_output_2" placeholder="Text Input 2">
+    </div>
+{% endblock %}
