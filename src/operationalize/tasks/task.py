@@ -1,6 +1,6 @@
 class Task_DAG:
-    def __init__(self, depedencies, dependents, **kwargs):
-        self.depedencies = depedencies
+    def __init__(self, dependencies, dependents, **kwargs):
+        self.dependencies = dependencies
         self.dependents = dependents
         expected_kwargs = [
             "name",
