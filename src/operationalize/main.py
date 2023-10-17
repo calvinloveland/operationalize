@@ -17,7 +17,14 @@ def index():
     return flask.render_template("index.html", project=example_split_work_task)
 
 
-@app.route("next_task/<worker_id>")
+@app.route("/next_task/<worker_id>")
+def next_task(worker_id):
+    return flask.render_template(
+        "task.html", task=current_task.get_next_task(worker_id)
+    )
+
+
+
 def main():
     app.run(debug=True)
 

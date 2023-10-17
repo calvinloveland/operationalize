@@ -11,13 +11,17 @@ class SplitWork(TaskDAG):
         self.time_limit = kwargs.get("time_limit", 120)
         depth = kwargs.get("depth", 3)
         self.id = kwargs.get("id", "a")
+        assert kwargs.get("work_chain") is not None
+        work_chain = kwargs.get("work_chain")
         if depth == 0:
-            self.dependents = copy.deepcopy([kwargs.get("work_chain")])
+            self.dependents = [copy.deepcopy(work_chain)]
         else:
-            self.dependents = [
-                SplitWork(depth=depth - 1, id=self.id + "a"),
-                SplitWork(depth=depth - 1, id=self.id + "b"),
-            ]
+            integrate_work = TaskDAG(name="Integrate Work", type="Integrate Work", description="Integrate work from other tasks", time_limit=120, id=self.id + "i")
+            split_work_a = SplitWork(depth=depth - 1, id=self.id + "a", work_chain= work_chain)
+            split_work_a.append_node(integrate_work)
+            split_work_b = SplitWork(depth=depth - 1, id=self.id + "b", work_chain= work_chain)
+            split_work_b.append_node(integrate_work)
+            self.dependents = [split_work_a, split_work_b]
 
     def complete(self, **kwargs):
         super().complete(**kwargs)

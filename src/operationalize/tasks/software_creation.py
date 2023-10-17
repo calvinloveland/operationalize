@@ -1,4 +1,5 @@
 from operationalize.tasks.task import TaskDAG
+from operationalize.tasks.split_work import SplitWork
 import copy
 
 """
@@ -55,7 +56,7 @@ class SoftwareCreation(TaskDAG):
             dependents=[code],
         )
 
-        split_work = TaskDAG(
+        split_work = SplitWork(
             name="Split Work",
             type="Split Work",
             description="Split work into tasks",
@@ -78,18 +79,8 @@ class SoftwareCreation(TaskDAG):
         )
         self.append_node(brainstorming)
         self.print_graph()
-        integration = TaskDAG(
-            name="Integration",
-            type="Integration",
-            description="Integrate code for each task",
-            requirements=["Code for each task"],
-            workspace="integration.html",
-            time_limit=180,
-            output="Integrated Code",
-        )
-        for i in range(3):
-            self.stitch_branches(integration)
-
+        print("done stitching branches")
+        self.print_graph()
         presentation = TaskDAG(
             name="Presentation",
             type="Presentation",
@@ -109,4 +100,4 @@ class SoftwareCreation(TaskDAG):
             output="Integrated Code",
             dependents=[presentation],
         )
-        self.append_node(testing)
+        #self.append_node(testing)
