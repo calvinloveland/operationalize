@@ -22,15 +22,6 @@ class TaskDAG:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-    def __deepcopy__(self, memo):
-        cls = self.__class__
-        result = cls.__new__(cls)
-        memo[id(self)] = result
-        for k, v in self.__dict__.items():
-            setattr(result, k, copy.deepcopy(v, memo))
-        
-        return result
-
 
     def get_expected_completion_time(self):
         if len(self.dependents) == 0:
@@ -65,34 +56,15 @@ class TaskDAG:
     def complete(self, **kwargs):
         self.completed = True
 
-#    def stitch_branches(self, stitching_node):
-#        """
-#        Stitch branches of the workflow together.
-#
-#        Parameters:
-#        -----------
-#        stitching_node : Task
-#            The task to stitch with.
-#
-#        Returns:
-#        --------
-#        None
-#        """
-#        assert len(self.dependents) <= 2
-#        if len(self.dependents) == 0:
-#            # If there are no dependents, add the stitching node as a dependent
-#            if stitching_node != self:
-#                self.dependents.append(stitching_node)
-#                print("Stitching {} to {}".format(stitching_node.name, self.name))
-#        elif len(self.dependents) == 1:
-#            # If there is one dependent, stitch the branches together
-#            self.dependents[0].stitch_branches(stitching_node)
-#        elif len(self.dependents) == 2:
-#            # If there are two dependents, create a shared stitch and stitch the branches together
-#            shared_stitch = copy.deepcopy(stitching_node)
-#            self.dependents[0].stitch_branches(shared_stitch)
-#            self.dependents[1].stitch_branches(shared_stitch)
-        
+    def get_next_task(self):
+        if not self.completed and self.assigned_to is None:
+            return self
+        else:
+            for task in self.dependents:
+                next_task = task.get_next_task()
+                if next_task is not None:
+                    return next_task
+        return None
 
     def append_node(self, node):
         if node == self:
