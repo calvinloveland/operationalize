@@ -1,10 +1,5 @@
 from operationalize.tasks.task import TaskDAG
-
-# {
-# "<id>" : IntegrateWork instance
-# }
-
-split_work_sisterhood = {}
+import copy
 
 
 class SplitWork(TaskDAG):
@@ -17,7 +12,7 @@ class SplitWork(TaskDAG):
         depth = kwargs.get("depth", 3)
         self.id = kwargs.get("id", "a")
         if depth == 0:
-            self.dependents = [kwargs.get("work_chain")]
+            self.dependents = copy.deepcopy([kwargs.get("work_chain")])
         else:
             self.dependents = [
                 SplitWork(depth=depth - 1, id=self.id + "a"),

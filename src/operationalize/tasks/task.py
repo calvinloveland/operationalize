@@ -1,3 +1,6 @@
+import copy
+
+
 class TaskDAG:
     def __init__(self, dependents=None, **kwargs):
         if dependents is None:
@@ -14,9 +17,6 @@ class TaskDAG:
         ]
         self.completed = False
         self.assigned_to = None
-        for key in kwargs:
-            if key not in expected_kwargs:
-                raise ValueError(f"Unexpected keyword argument: {key}")
         for key, value in kwargs.items():
             setattr(self, key, value)
 
@@ -52,3 +52,43 @@ class TaskDAG:
 
     def complete(self, **kwargs):
         self.completed = True
+
+    def stitch_branches(self, stitching_node):
+        """
+        Stitch branches of the workflow together.
+
+        Parameters:
+        -----------
+        stitching_node : Task
+            The task to stitch with.
+
+        Returns:
+        --------
+        None
+        """
+        assert len(self.dependents) <= 2
+        if len(self.dependents) == 2:
+            # If there are two dependents, create a shared stitch and stitch the branches together
+            shared_stitch = copy.deepcopy(stitching_node)
+            self.dependents[0].stitch_branches(shared_stitch)
+            self.dependents[1].stitch_branches(shared_stitch)
+        elif len(self.dependents) == 0:
+            # If there are no dependents, add the stitching node as a dependent
+            self.dependents.append(stitching_node)
+        else:
+            # If there are more than two dependents, stitch each dependent with the stitching node
+            for dependent in self.dependents:
+                dependent.stitch_branches(stitching_node)
+
+    def append_node(self, node):
+        if len(self.dependents) == 0:
+            self.dependents.append(node)
+        else:
+            for dependent in self.dependents:
+                dependent.append_node(node)
+        self.print_graph()
+
+    def print_graph(self, indent=0):
+        print(" " * indent + self.name)
+        for dependent in self.dependents:
+            dependent.print_graph(indent + 2)

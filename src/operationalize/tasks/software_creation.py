@@ -34,35 +34,6 @@ class SoftwareCreation(TaskDAG):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Software Creation"
-        presentation = TaskDAG(
-            name="Presentation",
-            type="Presentation",
-            description="Present integrated code",
-            requirements=["Integrated Code"],
-            workspace="presentation.html",
-            time_limit=300,
-            output="Presentation",
-        )
-        testing = TaskDAG(
-            name="Testing",
-            type="Testing",
-            description="Test (and fix) the code",
-            requirements=["Integrated Code"],
-            workspace="testing.html",
-            time_limit=180,
-            output="Integrated Code",
-            dependents=[presentation],
-        )
-        integration = TaskDAG(
-            name="Integration",
-            type="Integration",
-            description="Integrate code for each task",
-            requirements=["Code for each task"],
-            workspace="integration.html",
-            time_limit=180,
-            output="Integrated Code",
-            dependents=[testing],
-        )
         code = TaskDAG(
             name="Code",
             type="Code",
@@ -71,7 +42,7 @@ class SoftwareCreation(TaskDAG):
             workspace="code.html",
             time_limit=180,
             output="Code for each task",
-            dependents=[integration],
+            dependents=[],
         )
         tests = TaskDAG(
             name="Tests",
@@ -105,4 +76,37 @@ class SoftwareCreation(TaskDAG):
             output="Brainstorming",
             dependents=[split_work],
         )
-        self.depedencies = [brainstorming]
+        self.append_node(brainstorming)
+        self.print_graph()
+        integration = TaskDAG(
+            name="Integration",
+            type="Integration",
+            description="Integrate code for each task",
+            requirements=["Code for each task"],
+            workspace="integration.html",
+            time_limit=180,
+            output="Integrated Code",
+        )
+        for i in range(3):
+            self.stitch_branches(integration)
+
+        presentation = TaskDAG(
+            name="Presentation",
+            type="Presentation",
+            description="Present integrated code",
+            requirements=["Integrated Code"],
+            workspace="presentation.html",
+            time_limit=300,
+            output="Presentation",
+        )
+        testing = TaskDAG(
+            name="Testing",
+            type="Testing",
+            description="Test (and fix) the code",
+            requirements=["Integrated Code"],
+            workspace="testing.html",
+            time_limit=180,
+            output="Integrated Code",
+            dependents=[presentation],
+        )
+        self.append_node(testing)
