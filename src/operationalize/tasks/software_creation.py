@@ -60,7 +60,7 @@ split_work = SplitWork(
     workspace="split_text_workspace.html",
     time_limit=120,
     output="Tasks",
-    depth=1,
+    depth=3,
     work_chain=tests,
 )
 
@@ -68,16 +68,16 @@ split_work = SplitWork(
 class Brainstorming(TaskDAG):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.name = ("Brainstorming",)
-        self.type = ("Brainstorming",)
-        self.description = ("Brainstorming for something to create",)
-        self.requirements = (
-            ["Come up with a great idea for the human workers to create"],
-        )
+        self.name = "Brainstorming"
+        self.type = "Brainstorming"
+        self.description = "Brainstorming for something to create"
+        self.requirements = [
+            "Come up with a great idea for the human workers to create"
+        ]
 
-        self.workspace = ("text_workspace.html",)
-        self.time_limit = (120,)
-        self.output = ("Brainstorming",)
+        self.workspace = "text_workspace.html"
+        self.time_limit = 120
+        self.output = "Brainstorming"
         self.dependents = [split_work]
         self.completion_text = "The idea is:"
 

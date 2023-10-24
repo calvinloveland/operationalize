@@ -22,27 +22,34 @@ class SplitWork(TaskDAG):
         if depth == 0:
             self.dependents = [copy.deepcopy(work_chain), copy.deepcopy(work_chain)]
         else:
-            integrate_work = TaskDAG(
+            integrate_work_a = TaskDAG(
                 name="Integrate Work",
                 type="Integrate Work",
                 description="Integrate work from other tasks",
                 time_limit=120,
-                id=self.id + "i",
+                id=self.id + "ai",
+            )
+            integrate_work_b = TaskDAG(
+                name="Integrate Work",
+                type="Integrate Work",
+                description="Integrate work from other tasks",
+                time_limit=120,
+                id=self.id + "bi",
             )
             split_work_a = SplitWork(
                 depth=depth - 1,
                 id=self.id + "a",
                 work_chain=work_chain,
-                integration_task=integrate_work,
+                integration_task=integrate_work_a,
             )
-            split_work_a.append_node(integrate_work)
+            split_work_a.append_node(integrate_work_a)
             split_work_b = SplitWork(
                 depth=depth - 1,
                 id=self.id + "b",
                 work_chain=work_chain,
-                integration_task=integrate_work,
+                integration_task=integrate_work_b,
             )
-            split_work_b.append_node(integrate_work)
+            split_work_b.append_node(integrate_work_b)
             self.dependents = [split_work_a, split_work_b]
 
     def complete(self, **kwargs):

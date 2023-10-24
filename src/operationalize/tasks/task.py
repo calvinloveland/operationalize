@@ -5,6 +5,7 @@ import uuid
 class TaskDAG:
     def __init__(self, **kwargs):
         self.dependents = kwargs.get("dependents", [])
+        assert self.dependents is not None
         self.dependencies = kwargs.get("dependencies", [])
         self.name = kwargs.get("name", "TASK WITH NO NAME")
         self.type = kwargs.get("type", "TASK WITH NO TYPE")
@@ -12,10 +13,30 @@ class TaskDAG:
         self.workspace = kwargs.get("workspace", "text_workspace.html")
         self.time_limit = kwargs.get("time_limit", 120)
         self.requirements = kwargs.get("requirements", [])
+        self.id = kwargs.get("id", uuid.uuid4())
         self.completed = False
         self.assigned_to = None
         self.printed = False
+
+    def __deepcopy__(self, memo):
+        new_task = TaskDAG(
+            name=self.name,
+            type=self.type,
+            description=self.description,
+            workspace=self.workspace,
+            time_limit=self.time_limit,
+            requirements=self.requirements,
+            dependents=copy.deepcopy(self.dependents),
+            dependencies=copy.deepcopy(self.dependencies),
+        )
         self.id = uuid.uuid4()
+        return new_task
+
+
+    def to_mermaid_flowchart(self):
+        for dependent in self.dependents:
+            print(str(self.name).replace(" ","") + str(self.id) + " --> " + str(dependent.name).replace(" ","") + str(dependent.id))
+            dependent.to_mermaid_flowchart()
 
     def update_dependencies(self):
         for dependent in self.dependents:
@@ -87,9 +108,10 @@ class TaskDAG:
             self.dependents = [node]
         else:
             for dependent in self.dependents:
-                print(dependent)
-                assert dependent != self
-                dependent.append_node(node)
+                if dependent is not None:
+                    print(dependent)
+                    assert dependent != self
+                    dependent.append_node(node)
 
     def print_graph(self, indent=0):
         if self.printed == False:
