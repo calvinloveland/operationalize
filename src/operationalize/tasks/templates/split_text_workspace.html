@@ -54,11 +54,12 @@
 {% block content %}
 <div class="text-input-container">
   <div class="text-input-column">
-    <textarea name="workspace_output_1" placeholder="Text Input 1"></textarea>
+    <textarea class="workspace_output" name="workspace_output_1" placeholder="Text Input 1"></textarea>
   </div>
   <div class="text-input-column">
-    <textarea name="workspace_output_2" placeholder="Text Input 2"></textarea>
+    <textarea class="workspace_output" name="workspace_output_2" placeholder="Text Input 2"></textarea>
   </div>
+  <input type="button" class="btn btn-primary" onclick="submitWorkspace()" value="Submit">
 </div>
 <div class="task-requirements">
   <h2>Task Requirements:</h2>

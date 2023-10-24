@@ -76,6 +76,36 @@
             {% endblock %}
         </div>
         <div id="content">{% block content %}{% endblock %}</div>
+        <script>
+            function submitWorkspace() {
+                // Get the value of all the elements with class "workspace_output"
+                // var outputs = document.getElementsByClassName("workspace_output");
+                // for (var i = 0; i < outputs.length; i++) {
+                //     outputs[i] = outputs[i].value;
+                //     console.log(outputs[i])
+                // }
+                // the above code doesn't work for some reason
+                var outputs = [];
+                var output_elements = document.getElementsByClassName("workspace_output");
+                for (var i = 0; i < output_elements.length; i++) {
+                    outputs.push(output_elements[i].value);
+                }
+
+                var data = {
+                    "output": outputs
+                };
+                console.log(data)
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/task/{{ task.id }}", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify(data));
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        window.location.href = "/" + "?worker_id={{worker_id}}"
+                    }
+                };
+            }
+        </script>
         <div id="footer">
             {% block footer %}
             A Calvin Loveland project.

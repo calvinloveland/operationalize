@@ -5,8 +5,9 @@
 {% block content %}
 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 90vh;">
     <div style="margin-bottom: 1em;">ENTER YOUR WORKER ID BELOW</div>
-    <input style="margin-bottom: 1em" type="text" style="text-align: center;" placeholder="HUMAN WORKER 48533">
-    <input style="margin-bottom: 1em" type="button" value="READY TO WORK" disabled>
-    <div>0 availabe tasks</div>
+    <input style="margin-bottom: 1em" type="text" style="text-align: center;" value="{{ worker_id }}" id="worker_id">
+    <input style="margin-bottom: 1em" type="button" value="READY TO WORK"
+        onclick="window.location.href='/next_task/' + document.getElementById('worker_id').value">
+    <div>{{ task.count_open_tasks() }} availabe tasks</div>
 </div>
 {% endblock %}
