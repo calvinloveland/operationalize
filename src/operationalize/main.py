@@ -27,7 +27,7 @@ def next_task(worker_id):
     task = current_task.get_next_task(worker_id)
     if task is None:
         return flask.render_template("waiting.html", worker_id=worker_id)
-    task.assigned_to = worker_id
+    task.assign(worker_id)
     print(f"Giving task {task.name} to worker {worker_id}")
     return flask.render_template(task.workspace, task=task, worker_id=worker_id)
 

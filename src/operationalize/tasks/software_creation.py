@@ -34,35 +34,33 @@ code = TaskDAG(
     name="Code",
     type="Code",
     description="Create code for each task",
-    requirements=[],
-    workspace="code.html",
+    requirements=["Write code to pass this unit test"],
+    workspace="text_workspace.html",
     time_limit=180,
     output="Code for each task",
     dependents=[],
+    completion_text="The code is:",
 )
 tests = TaskDAG(
     name="Tests",
     type="Tests",
     description="Create tests for each task",
-    requirements=[],
-    workspace="tests.html",
+    requirements=["Create a unit test for this task"],
+    workspace="text_workspace.html",
     time_limit=120,
     output="Tests for each task",
     dependents=[code],
+    completion_text="The tests are:",
 )
 
 split_work = SplitWork(
     name="Split Work",
     type="Split Work",
     description="Split work into tasks",
-    requirements=[
-        "Split the work into two complete subtasks.",
-        "Tasks should cover all of the work that needs to be done.",
-    ],
     workspace="split_text_workspace.html",
     time_limit=120,
     output="Tasks",
-    depth=3,
+    depth=1,
     work_chain=tests,
 )
 
@@ -76,15 +74,12 @@ class Brainstorming(TaskDAG):
         self.requirements = (
             ["Come up with a great idea for the human workers to create"],
         )
+
         self.workspace = ("text_workspace.html",)
         self.time_limit = (120,)
         self.output = ("Brainstorming",)
         self.dependents = [split_work]
-
-    def complete(self, **kwargs):
-        super().complete(**kwargs)
-        for dependent in self.dependents:
-            dependent.requirements.append(f"The idea is: {kwargs.get('output')}")
+        self.completion_text = "The idea is:"
 
 
 class SoftwareCreation(TaskDAG):
@@ -101,7 +96,7 @@ class SoftwareCreation(TaskDAG):
             type="Presentation",
             description="Present integrated code",
             requirements=["Integrate Code"],
-            workspace="presentation.html",
+            workspace="text_workspace.html",
             time_limit=300,
             output="Presentation",
         )

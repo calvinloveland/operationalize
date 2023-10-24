@@ -11,22 +11,58 @@ class SplitWork(TaskDAG):
         self.time_limit = kwargs.get("time_limit", 120)
         depth = kwargs.get("depth", 3)
         self.id = kwargs.get("id", "a")
+        self.workspace = kwargs.get("workspace", "split_text_workspace.html")
+        self.requirements = [
+            "Split the work into two complete subtasks.",
+            "Tasks should cover all of the work that needs to be done.",
+        ]
         assert kwargs.get("work_chain") is not None
         work_chain = kwargs.get("work_chain")
+        self.integration_task = kwargs.get("integration_task")
         if depth == 0:
-            self.dependents = [copy.deepcopy(work_chain)]
+            self.dependents = [copy.deepcopy(work_chain), copy.deepcopy(work_chain)]
         else:
-            integrate_work = TaskDAG(name="Integrate Work", type="Integrate Work", description="Integrate work from other tasks", time_limit=120, id=self.id + "i")
-            split_work_a = SplitWork(depth=depth - 1, id=self.id + "a", work_chain= work_chain)
+            integrate_work = TaskDAG(
+                name="Integrate Work",
+                type="Integrate Work",
+                description="Integrate work from other tasks",
+                time_limit=120,
+                id=self.id + "i",
+            )
+            split_work_a = SplitWork(
+                depth=depth - 1,
+                id=self.id + "a",
+                work_chain=work_chain,
+                integration_task=integrate_work,
+            )
             split_work_a.append_node(integrate_work)
-            split_work_b = SplitWork(depth=depth - 1, id=self.id + "b", work_chain= work_chain)
+            split_work_b = SplitWork(
+                depth=depth - 1,
+                id=self.id + "b",
+                work_chain=work_chain,
+                integration_task=integrate_work,
+            )
             split_work_b.append_node(integrate_work)
             self.dependents = [split_work_a, split_work_b]
 
     def complete(self, **kwargs):
         super().complete(**kwargs)
-        # continue_splitting = kwargs.get("continue_splitting", False)
-        # TODO: implement more splitting the DAG even further
+        assert len(self.dependents) == 2
+        assert len(kwargs.get("output")) == 2
+        self.dependents[0].requirements.append(
+            f"The idea is: {kwargs.get('output')[0]}"
+        )
+        if isinstance(self.dependents[0], SplitWork):
+            self.dependents[0].integration_task.requirements.append(
+                "The idea is: " + kwargs.get("output")[0]
+            )
+        self.dependents[1].requirements.append(
+            f"The idea is: {kwargs.get('output')[1]}"
+        )
+        if isinstance(self.dependents[1], SplitWork):
+            self.dependents[1].integration_task.requirements.append(
+                "The idea is: " + kwargs.get("output")[1]
+            )
 
 
 class IntegrateWork(TaskDAG):
@@ -38,13 +74,4 @@ class IntegrateWork(TaskDAG):
         self.time_limit = kwargs.get("time_limit", 120)
         self.id = kwargs.get("id", "a")
         self.dependents = [kwargs.get("work_chain")]
-
-    def complete(self, **kwargs):
-        super().complete(**kwargs)
-        # continue_splitting = kwargs.get("continue_splitting", False)
-
-    def __copy__(self):
-        pass
-
-    def __deepcopy__(self):
-        pass
+        self.workspace = kwargs.get("workspace", "text_workspace.html")
