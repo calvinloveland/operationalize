@@ -1,6 +1,8 @@
 import copy
 import uuid
 
+from loguru import logger
+
 
 class TaskDAG:
     def __init__(self, **kwargs):
@@ -19,17 +21,12 @@ class TaskDAG:
         self.printed = False
 
     def __deepcopy__(self, memo):
-        new_task = TaskDAG(
-            name=self.name,
-            type=self.type,
-            description=self.description,
-            workspace=self.workspace,
-            time_limit=self.time_limit,
-            requirements=self.requirements,
-            dependents=copy.deepcopy(self.dependents),
-            dependencies=copy.deepcopy(self.dependencies),
-        )
-        self.id = uuid.uuid4()
+        cls = self.__class__
+        new_task = cls.__new__(cls)
+        memo[id(self)] = new_task
+        for k, v in self.__dict__.items():
+            setattr(new_task, k, copy.deepcopy(v, memo))
+        new_task.id = uuid.uuid4()
         return new_task
 
     def to_mermaid_flowchart(self):
@@ -88,15 +85,12 @@ class TaskDAG:
 
     def get_next_task(self, worker_id=None):
         self.update_dependencies()
-        print(self.name)
-        print(self.completed)
-        print(self.assigned_to)
-        print(worker_id)
+        logger.info(f"Getting next task for worker {worker_id}")
         if self.task_is_ready(worker_id):
             return self
         else:
             if not self.completed:
-                print("task is not complete!")
+                logger.info(f"Task {self.name} is not ready")
                 return None
             for task in self.dependents:
                 next_task = task.get_next_task(worker_id)
@@ -106,21 +100,19 @@ class TaskDAG:
 
     def append_node(self, node):
         if node == self:
-            print("AAAAAAAAAAAAAAAAH")
-            print(node.name)
+            logger.warning(f"Node is already at the end of graph: {node.name}")
             return
         if len(self.dependents) == 0:
             self.dependents = [node]
         else:
             for dependent in self.dependents:
                 if dependent is not None:
-                    print(dependent)
                     assert dependent != self
                     dependent.append_node(node)
 
     def print_graph(self, indent=0):
         if self.printed == False:
-            print(" " * indent + self.name + "-" + str(self.id))
+            logger.info(" " * indent + self.name)
             self.printed = True
         for dependent in self.dependents:
             assert dependent != self
@@ -131,16 +123,15 @@ class TaskDAG:
         self.completed = True
         if hasattr(self, "completion_text"):
             for dependent in self.dependents:
+                logger.info(f"Adding completion text to {dependent.name}")
                 dependent.requirements.append(
                     self.completion_text + " " + str(kwargs.get("output"))
                 )
 
     def get_task_by_id(self, task_id):
-        print(self.name)
-        print(self.id)
-        print(task_id)
+        logger.info(f"Looking for task {task_id} in {self.name}")
         if str(self.id) == str(task_id):
-            print("found task")
+            logger.info(f"Found task {self.name}")
             return self
         for dependent in self.dependents:
             task = dependent.get_task_by_id(task_id)

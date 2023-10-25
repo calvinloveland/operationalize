@@ -1,6 +1,7 @@
 import os
 import random
 
+from loguru import logger
 import flask
 from flask import render_template, request
 
@@ -31,7 +32,7 @@ def next_task(worker_id):
     if task is None:
         return flask.render_template("waiting.html", worker_id=worker_id)
     task.assign(worker_id)
-    print(f"Giving task {task.name} to worker {worker_id}")
+    logger.info(f"Giving task {task.name} to worker {worker_id}")
     return flask.render_template(task.workspace, task=task, worker_id=worker_id)
 
 
@@ -41,11 +42,12 @@ def submit_task(task_id):
     if task is None:
         return "Task not found", 404
     request_data = request.get_json()
-    print(request_data)
+    logger.info(f"Completing task {task.name} with data {request_data}")
     task.complete(**request_data)
     return "Task completed"
 
 
+@logger.catch
 def main():
     app.run(debug=True)
 
