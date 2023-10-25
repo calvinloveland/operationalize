@@ -1,8 +1,10 @@
-import flask
-from flask import render_template, request
-from operationalize.tasks.software_creation import SoftwareCreation
 import os
 import random
+
+import flask
+from flask import render_template, request
+
+from operationalize.tasks.software_creation import SoftwareCreation
 
 app = flask.Flask(
     __name__,

@@ -1,13 +1,12 @@
-from operationalize.tasks.task import Task
-from operationalize.tasks.split_work import SplitWork
+from flask import render_template
+
 from operationalize.tasks.design import Design
 from operationalize.tasks.develop import Develop
 from operationalize.tasks.integrate import Integrate
-from operationalize.tasks.test import Test
 from operationalize.tasks.quality_assure import QualityAssure
-
-
-from flask import render_template
+from operationalize.tasks.split_work import SplitWork
+from operationalize.tasks.task import Task
+from operationalize.tasks.test import Test
 
 
 def Project(Task):

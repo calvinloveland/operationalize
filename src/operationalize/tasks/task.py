@@ -32,10 +32,15 @@ class TaskDAG:
         self.id = uuid.uuid4()
         return new_task
 
-
     def to_mermaid_flowchart(self):
         for dependent in self.dependents:
-            print(str(self.name).replace(" ","") + str(self.id) + " --> " + str(dependent.name).replace(" ","") + str(dependent.id))
+            print(
+                str(self.name).replace(" ", "")
+                + str(self.id)
+                + " --> "
+                + str(dependent.name).replace(" ", "")
+                + str(dependent.id)
+            )
             dependent.to_mermaid_flowchart()
 
     def update_dependencies(self):

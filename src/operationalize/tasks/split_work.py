@@ -1,5 +1,6 @@
-from operationalize.tasks.task import TaskDAG
 import copy
+
+from operationalize.tasks.task import TaskDAG
 
 
 class SplitWork(TaskDAG):

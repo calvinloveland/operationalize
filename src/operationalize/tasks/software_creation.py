@@ -1,6 +1,7 @@
-from operationalize.tasks.task import TaskDAG
-from operationalize.tasks.split_work import SplitWork
 import copy
+
+from operationalize.tasks.split_work import SplitWork
+from operationalize.tasks.task import TaskDAG
 
 """
 Software Creation
