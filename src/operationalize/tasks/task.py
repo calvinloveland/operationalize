@@ -71,8 +71,6 @@ class TaskDAG:
         return tasks
 
     def count_open_tasks(self):
-        if self.get_open_tasks() is None:
-            return 0
         return len(self.get_open_tasks())
 
     def assign(self, worker_id):

@@ -103,3 +103,23 @@ def test_task_completion_with_completion_text():
     assert task_dag.output == "This is a test"
     assert subsequent_task_dag.task_is_ready() == True
     assert "This is a test" in subsequent_task_dag.requirements[0]
+
+
+def test_no_open_task():
+    task_dag = TaskDAG()
+    assert task_dag.get_next_task() == task_dag
+    task_dag.complete(output="This is a test")
+    assert task_dag.get_next_task() == None
+    assert task_dag.count_open_tasks() == 0
+
+
+def test_get_task_by_id_miss():
+    task_dag = TaskDAG()
+    assert task_dag.get_task_by_id("MISS") == None
+
+
+def test_print_graph():
+    task_dag = TaskDAG()
+    task_dag.append_node(TaskDAG())
+    task_dag.print_graph()
+    assert True
