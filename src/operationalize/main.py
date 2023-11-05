@@ -1,9 +1,9 @@
 import os
 import random
 
-from loguru import logger
 import flask
-from flask import render_template, request
+from flask import request
+from loguru import logger
 
 from operationalize.tasks.software_creation import SoftwareCreation
 

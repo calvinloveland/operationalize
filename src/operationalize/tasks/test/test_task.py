@@ -1,7 +1,9 @@
-from operationalize.tasks.task import TaskDAG
-from copy import deepcopy
-from loguru import logger
 import sys
+from copy import deepcopy
+
+from loguru import logger
+
+from operationalize.tasks.task import TaskDAG
 
 # Set logging level stdout to DEBUG
 logger.remove()

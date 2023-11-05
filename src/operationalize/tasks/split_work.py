@@ -41,21 +41,17 @@ class SplitWork(TaskDAG):
         self.append_node(integration)
         self.integration_task = integration
 
-    def complete(self, **kwargs):
-        super().complete(**kwargs)
+    def complete(self, output):
+        super().complete(output)
         assert len(self.dependents) == 2
-        assert len(kwargs.get("output")) == 2
-        self.dependents[0].requirements.append(
-            f"The idea is: {kwargs.get('output')[0]}"
-        )
+        assert len(output) == 2
+        self.dependents[0].requirements.append(f"The idea is: {output[0]}")
         if isinstance(self.dependents[0], SplitWork):
             self.dependents[0].integration_task.requirements.append(
-                "The idea is: " + kwargs.get("output")[0]
+                "The idea is: " + output[0]
             )
-        self.dependents[1].requirements.append(
-            f"The idea is: {kwargs.get('output')[1]}"
-        )
+        self.dependents[1].requirements.append(f"The idea is: {output[1]}")
         if isinstance(self.dependents[1], SplitWork):
             self.dependents[1].integration_task.requirements.append(
-                "The idea is: " + kwargs.get("output")[1]
+                "The idea is: " + output[1]
             )

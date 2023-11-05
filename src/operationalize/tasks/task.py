@@ -90,14 +90,13 @@ class TaskDAG:
         logger.info(f"Getting next task for worker {worker_id}")
         if self.task_is_ready(worker_id):
             return self
-        else:
-            if not self.completed:
-                logger.info(f"Task {self.name} is not ready")
-                return None
-            for task in self.dependents:
-                next_task = task.get_next_task(worker_id)
-                if next_task is not None:
-                    return next_task
+        if not self.completed:
+            logger.info(f"Task {self.name} is not ready")
+            return None
+        for task in self.dependents:
+            next_task = task.get_next_task(worker_id)
+            if next_task is not None:
+                return next_task
         return None
 
     def append_node(self, node):
@@ -113,7 +112,7 @@ class TaskDAG:
                     dependent.append_node(node)
 
     def print_graph(self, indent=0):
-        if self.printed == False:
+        if not self.printed:
             logger.info(" " * indent + self.name)
             self.printed = True
         for dependent in self.dependents:
