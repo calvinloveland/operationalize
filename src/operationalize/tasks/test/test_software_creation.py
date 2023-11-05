@@ -13,5 +13,5 @@ def test_completing_task():
     while software_creation.get_next_task() is not None:
         assert i < 100
         next_task = software_creation.get_next_task()
-        next_task.complete()
+        next_task.complete(output="This is a test")
         i += 1

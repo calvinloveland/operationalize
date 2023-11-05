@@ -90,3 +90,14 @@ def test_task_dag_get_task_by_id():
     task_dag.append_node(another_task_dag)
     task_dag.update_dependencies()
     assert task_dag.get_task_by_id(another_task_dag.id) == another_task_dag
+
+
+def test_task_completion_with_completion_text():
+    task_dag = TaskDAG(completion_text="This is a test")
+    subsequent_task_dag = TaskDAG()
+    task_dag.append_node(subsequent_task_dag)
+    task_dag.complete(output="This is a test")
+    assert task_dag.completed == True
+    assert task_dag.output == "This is a test"
+    assert subsequent_task_dag.task_is_ready() == True
+    assert "This is a test" in subsequent_task_dag.requirements[0]

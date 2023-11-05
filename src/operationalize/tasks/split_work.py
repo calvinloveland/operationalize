@@ -16,7 +16,6 @@ class SplitWork(TaskDAG):
         ]
         assert kwargs.get("work_chain") is not None
         work_chain = kwargs.get("work_chain")
-        self.integration_task = kwargs.get("integration_task")
         if depth == 0:
             self.dependents = [copy.deepcopy(work_chain), copy.deepcopy(work_chain)]
         else:
@@ -37,6 +36,7 @@ class SplitWork(TaskDAG):
             description="Integrate work from other tasks",
             time_limit=120,
             id=self.id + "i",
+            completion_text="Integrated work from other tasks:",
         )
         self.append_node(integration)
         self.integration_task = integration

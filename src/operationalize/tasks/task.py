@@ -16,9 +16,11 @@ class TaskDAG:
         self.time_limit = kwargs.get("time_limit", 120)
         self.requirements = kwargs.get("requirements", [])
         self.id = kwargs.get("id", uuid.uuid4())
+        self.completion_text = kwargs.get("completion_text", None)
         self.completed = False
         self.assigned_to = None
         self.printed = False
+        self.output = None
 
     def __deepcopy__(self, memo):
         cls = self.__class__
@@ -119,14 +121,15 @@ class TaskDAG:
             dependent.print_graph(indent + 2)
         self.printed = False
 
-    def complete(self, **kwargs):
+    def complete(self, output):
         self.completed = True
-        if hasattr(self, "completion_text"):
+        self.output = output
+        if self.completion_text is not None:
             for dependent in self.dependents:
                 logger.info(f"Adding completion text to {dependent.name}")
-                dependent.requirements.append(
-                    self.completion_text + " " + str(kwargs.get("output"))
-                )
+                dependent.requirements.append(self.completion_text + " " + str(output))
+        else:
+            logger.warning(f"No completion text for {self.name}")
 
     def get_task_by_id(self, task_id):
         logger.info(f"Looking for task {task_id} in {self.name}")
