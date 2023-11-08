@@ -10,4 +10,8 @@
         onclick="window.location.href='/next_task/' + document.getElementById('worker_id').value">
     <div>{{ task.count_open_tasks() }} availabe tasks</div>
 </div>
+    <pre class="mermaid">
+        {{task.to_mermaid_flowchart()}}
+    </pre>
+
 {% endblock %}

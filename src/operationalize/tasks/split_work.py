@@ -45,13 +45,6 @@ class SplitWork(TaskDAG):
         super().complete(output)
         assert len(self.dependents) == 2
         assert len(output) == 2
+        self.integration_task.requirements.append(self.requirements[-1])
         self.dependents[0].requirements.append(f"The idea is: {output[0]}")
-        if isinstance(self.dependents[0], SplitWork):
-            self.dependents[0].integration_task.requirements.append(
-                "The idea is: " + output[0]
-            )
         self.dependents[1].requirements.append(f"The idea is: {output[1]}")
-        if isinstance(self.dependents[1], SplitWork):
-            self.dependents[1].integration_task.requirements.append(
-                "The idea is: " + output[1]
-            )

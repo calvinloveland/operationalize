@@ -14,8 +14,7 @@ app = flask.Flask(
 )
 
 current_task = SoftwareCreation()
-current_task.to_mermaid_flowchart()
-
+print(current_task.to_mermaid_flowchart())
 
 @app.route("/")
 def index():

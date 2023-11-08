@@ -55,6 +55,11 @@
             text-align: center;
         }
     </style>
+    <link
+    rel="stylesheet"
+    data-name="vs/editor/editor.main"
+    href="{{ url_for('static',filename='node_modules/monaco-editor/min/vs/editor/editor.main.css')}}"
+    />
     {% endblock %}
 </head>
 
@@ -68,7 +73,23 @@
                 {% if task%}
                 <span style="width:33%;">Current task: {{task.name}}-<span
                         style="font-size: smaller;">{{task.description}}</span></span>
-                <span style="text-align: center;">Task timer: {{task.time_limit}}</span>
+                <span id="task-timer" style="text-align: center;">Task timer: {{task.time_limit}}</span>
+                <script>
+                    // Note: timer is in seconds
+                    var timer = setInterval(function () {
+                        var time_limit = document.getElementById("task-timer");
+                        var time = time_limit.innerHTML.split(":");
+                        var seconds = parseInt(time[1]);
+                        seconds -= 1;
+                        if (seconds <= 0){
+                            clearInterval(timer);
+                            time_limit.innerHTML = "Task timer: OVERDUE!!";
+                        }
+                        else {
+                            time_limit.innerHTML = "Task timer: " + seconds;
+                        }
+                    }, 1000);
+                </script>
                 <span style="margin-left: auto;">Project timeline:
                     {{task.get_final().get_expected_completion_time()}}</span>
                 {% endif %}
@@ -87,6 +108,9 @@
                 // the above code doesn't work for some reason
                 var outputs = [];
                 var output_elements = document.getElementsByClassName("workspace_output");
+                if (output_elements.length == 0) {
+                    outputs.push(editor.getValue());
+                }
                 for (var i = 0; i < output_elements.length; i++) {
                     outputs.push(output_elements[i].value);
                 }
@@ -112,6 +136,11 @@
             {% endblock %}
         </div>
     </div>
+    <script type="module">
+    
+      import mermaid from '{{ url_for("static", filename="node_modules/mermaid/dist/mermaid.esm.min.mjs")}}';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
 </body>
 
 </html>
