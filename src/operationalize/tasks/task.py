@@ -34,7 +34,14 @@ class TaskDAG:
     def to_mermaid_flowchart(self, prepend="flowchart TD\n"):
         chart = prepend
         for dependent in self.dependents:
-            chart += str(self.name).replace(" ", "") + str(self.id) + " --> " + str(dependent.name).replace(" ", "") + str(dependent.id) + "\n"
+            chart += (
+                str(self.name).replace(" ", "")
+                + str(self.id)
+                + " --> "
+                + str(dependent.name).replace(" ", "")
+                + str(dependent.id)
+                + "\n"
+            )
             chart += dependent.to_mermaid_flowchart(prepend="")
         return chart
 

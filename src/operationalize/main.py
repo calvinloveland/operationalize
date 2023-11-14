@@ -16,6 +16,7 @@ app = flask.Flask(
 current_task = SoftwareCreation()
 print(current_task.to_mermaid_flowchart())
 
+
 @app.route("/")
 def index():
     request_data = request.args
