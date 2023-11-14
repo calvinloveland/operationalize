@@ -59,7 +59,7 @@ split_work = SplitWork(
     workspace="split_text_workspace.html",
     time_limit=120,
     output="Tasks",
-    depth=1,
+    depth=3,
     work_chain=tests,
 )
 

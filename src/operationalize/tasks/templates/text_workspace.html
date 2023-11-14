@@ -5,7 +5,7 @@
         <h3>Requirements:</h3>
         <ul>
             {% for requirement in task.requirements %}
-            <li>{{ requirement }}</li>
+            <li><pre>{{ requirement.replace("\\n","\n") }}</pre></li>
             {% endfor %}
         </ul>
     </div>

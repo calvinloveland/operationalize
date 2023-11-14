@@ -97,6 +97,7 @@
             {% endblock %}
         </div>
         <div id="content">{% block content %}{% endblock %}</div>
+        {% if task %}
         <script>
             function submitWorkspace() {
                 // Get the value of all the elements with class "workspace_output"
@@ -130,6 +131,7 @@
                 };
             }
         </script>
+        {% endif %}
         <div id="footer">
             {% block footer %}
             A Calvin Loveland project.
