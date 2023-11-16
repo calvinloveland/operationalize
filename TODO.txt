@@ -1,0 +1,13 @@
+AAA # todo following this format: https://github.com/todotxt/todo.txt
+(A) Backlashes are added to code containing strings
+(A) Availabe should be available
+(A) Submit is hidden by footer
+(B) Code should be injected in to editor automatically
+(B) Add ability to execute code in the editor
+(B) Task counting is off
+(B) Allow arbitray splitting/integrating. Instead of having a fixed number of divisions of a specific task, it would be cool if the user could keep dividing tasks until they feel they are at a good granular level and have a checkbox or something that says "don't split this task further" or something.
+(B) Server based task timing
+(B) Update available tasks in real time
+(B) Better tools for visually entire task DAG, current progress, etc.
+(B) Allow failure and rework of tasks?
+(C) Spectator view
