@@ -8,4 +8,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - run: python3 -m pip install pytest
+      - run: python3 -m pip install -e .
       - run: python3 ci/ci.py
