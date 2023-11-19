@@ -49,7 +49,7 @@ tests = TaskDAG(
     time_limit=120,
     output="Tests for each task",
     dependents=[code],
-    completion_text="The tests are:",
+    completion_text="The tests are:\n",
 )
 
 split_work = SplitWork(

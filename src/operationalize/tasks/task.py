@@ -66,11 +66,12 @@ class TaskDAG:
 
     def get_open_tasks(self):
         if self.task_is_ready():
-            return [self]
-        tasks = []
+            return set([self])
+        tasks = set()
         for task in self.dependents:
             if task.get_open_tasks() is not None:
-                tasks.extend(task.get_open_tasks())
+                for task in task.get_open_tasks():
+                    tasks.add(task)
         return tasks
 
     def count_open_tasks(self):
@@ -122,12 +123,16 @@ class TaskDAG:
         self.printed = False
 
     def complete(self, output):
+        def pretty_print(output):
+            if isinstance(output, list):
+                return "\n".join([str(o) for o in output])
+            return str(output)
         self.completed = True
         self.output = output
         if self.completion_text is not None:
             for dependent in self.dependents:
                 logger.info(f"Adding completion text to {dependent.name}")
-                dependent.requirements.append(self.completion_text + " " + str(output))
+                dependent.requirements.append(self.completion_text + " " + pretty_print(output))
         else:
             logger.warning(f"No completion text for {self.name}")
 

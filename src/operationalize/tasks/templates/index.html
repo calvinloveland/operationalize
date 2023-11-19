@@ -8,7 +8,7 @@
     <input style="margin-bottom: 1em" type="text" style="text-align: center;" value="{{ worker_id }}" id="worker_id">
     <input style="margin-bottom: 1em" type="button" value="READY TO WORK"
         onclick="window.location.href='/next_task/' + document.getElementById('worker_id').value">
-    <div>{{ task.count_open_tasks() }} availabe tasks</div>
+    <div>{{ task.count_open_tasks() }} available tasks</div>
 </div>
     <pre class="mermaid">
         {{task.to_mermaid_flowchart()}}
