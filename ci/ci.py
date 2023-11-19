@@ -1,7 +1,7 @@
 import subprocess
 
 # Run pytest
-result = subprocess.run(["pytest", "-v", "-s", "--cov=src", "--cov-report=term-missing"])
+result = subprocess.run(["pytest", "-v"])
 
 # Check if pytest passed
 if result.returncode != 0:
