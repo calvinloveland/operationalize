@@ -1,0 +1,17 @@
+{% extends "base_template.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 90vh;">
+    <div style="margin-bottom: 1em;">ENTER YOUR WORKER ID BELOW</div>
+    <input style="margin-bottom: 1em" type="text" style="text-align: center;" value="{{ worker_id }}" id="worker_id">
+    <input style="margin-bottom: 1em" type="button" value="READY TO WORK"
+        onclick="window.location.href='/next_task/' + document.getElementById('worker_id').value">
+    <div>{{ task.count_open_tasks() }} available tasks</div>
+</div>
+    <pre class="mermaid">
+        {{task.to_mermaid_flowchart()}}
+    </pre>
+
+{% endblock %}

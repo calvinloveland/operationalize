@@ -16,7 +16,8 @@ classifiers = [
 dependencies = ["distro",
 "pyfiglet",
 "tqdm",
-"loguru",]
+"loguru",
+"flask"]
 dynamic = ["version"]
 
 [project.scripts]

@@ -1,22 +1,56 @@
-import flask
-from flask import render_template
-from operationalize.tasks.split_work import split_work_task
 import os
-app = flask.Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__),'tasks/templates'),static_url_path='')
+import random
+
+import flask
+from flask import request
+from loguru import logger
+
+from operationalize.tasks.software_creation import SoftwareCreation
+
+app = flask.Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(__file__), "tasks/templates"),
+    static_url_path="",
+)
+
+current_task = SoftwareCreation()
+print(current_task.to_mermaid_flowchart())
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return flask.render_template('index.html')
+    request_data = request.args
+    worker_id = request_data.get("worker_id", None)
+    if worker_id is None:
+        worker_id = "HUMAN WORKER " + str(random.randint(0, 1000000))
+    return flask.render_template("index.html", task=current_task, worker_id=worker_id)
 
 
-@app.route('/split_work')
-def split_work():
-    return render_template(split_work_task.workspace, task=split_work_task)
+@app.route("/next_task/<worker_id>")
+def next_task(worker_id):
+    task = current_task.get_next_task(worker_id)
+    if task is None:
+        return flask.render_template("waiting.html", worker_id=worker_id)
+    task.assign(worker_id)
+    logger.info(f"Giving task {task.name} to worker {worker_id}")
+    return flask.render_template(task.workspace, task=task, worker_id=worker_id)
 
 
+@app.route("/task/<task_id>", methods=["POST", "GET"])
+def submit_task(task_id):
+    task = current_task.get_task_by_id(task_id)
+    if task is None:
+        return "Task not found", 404
+    request_data = request.get_json()
+    logger.info(f"Completing task {task.name} with data {request_data}")
+    task.complete(**request_data)
+    return "Task completed"
+
+
+@logger.catch
 def main():
     app.run(debug=True)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
