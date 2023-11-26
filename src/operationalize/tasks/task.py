@@ -127,12 +127,15 @@ class TaskDAG:
             if isinstance(output, list):
                 return "\n".join([str(o) for o in output])
             return str(output)
+
         self.completed = True
         self.output = output
         if self.completion_text is not None:
             for dependent in self.dependents:
                 logger.info(f"Adding completion text to {dependent.name}")
-                dependent.requirements.append(self.completion_text + " " + pretty_print(output))
+                dependent.requirements.append(
+                    self.completion_text + " " + pretty_print(output)
+                )
         else:
             logger.warning(f"No completion text for {self.name}")
 
