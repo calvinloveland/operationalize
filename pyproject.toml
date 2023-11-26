@@ -18,7 +18,9 @@ dependencies = ["distro",
 "tqdm",
 "loguru",
 "flask",
-"GitPython"]
+"GitPython",
+"prospector",
+"black"]
 dynamic = ["version"]
 
 [project.scripts]
