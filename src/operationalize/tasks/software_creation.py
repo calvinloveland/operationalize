@@ -1,33 +1,25 @@
 from operationalize.tasks.split_work import SplitWork
 from operationalize.tasks.task import TaskDAG
 
-"""
-Software Creation
------------------
-
-1. Brainstorming for something to create
-2. Split work into tasks
-2.1 Continue splitting work until tasks are small enough
-3. Create tests for each task
-4. Create code for each task
-5. Integrate code for each task
-6. Test integrated code
-7. Present integrated code
-
-1. -> 2.
-2. -> 2.1,2.2
-2.1 -> 2.1.1,2.1.2
-2.2 -> 2.2.1,2.2.2
-2.1.1 -> 2.1.1.1, 2.1.1.2
-2.1.2 -> 2.1.2.1, 2.1.2.2
-2.2.1 -> so on and so forth
-
-
-
-
-
-
-"""
+## Software Creation
+## -----------------
+## 
+## 1. Brainstorming for something to create
+## 2. Split work into tasks
+## 2.1 Continue splitting work until tasks are small enough
+## 3. Create tests for each task
+## 4. Create code for each task
+## 5. Integrate code for each task
+## 6. Test integrated code
+## 7. Present integrated code
+## 
+## 1. -> 2.
+## 2. -> 2.1,2.2
+## 2.1 -> 2.1.1,2.1.2
+## 2.2 -> 2.2.1,2.2.2
+## 2.1.1 -> 2.1.1.1, 2.1.1.2
+## 2.1.2 -> 2.1.2.1, 2.1.2.2
+## 2.2.1 -> so on and so forth
 
 code = TaskDAG(
     name="Code",

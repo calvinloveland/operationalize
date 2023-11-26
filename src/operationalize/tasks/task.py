@@ -55,7 +55,7 @@ class TaskDAG:
         if len(self.dependents) == 0:
             return self.time_limit
         dependent_time = max(
-            [d.get_expected_completion_time() for d in self.dependents]
+            d.get_expected_completion_time() for d in self.dependents
         )
         return self.time_limit + dependent_time
 
@@ -84,7 +84,7 @@ class TaskDAG:
         return (
             not self.completed
             and (self.assigned_to is None or self.assigned_to == worker_id)
-            and all([d.completed for d in self.dependencies])
+            and all(d.completed for d in self.dependencies)
         )
 
     def get_next_task(self, worker_id=None):
