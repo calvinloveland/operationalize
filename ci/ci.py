@@ -10,13 +10,13 @@ if result.returncode != 0:
     issues_found = True
 
 # Run prospector
-result = subprocess.run(["prospector", "--ignore-paths", "test/"], check = True)
+result = subprocess.run(["prospector", "--ignore-paths", "**/test/**"], check = True)
 if result.returncode != 0:
     print("Prospector found issues!")
     issues_found = True
 
 # Run black
-result = subprocess.run(["black", "--check", "--exclude", "test/","."], check = True)
+result = subprocess.run(["black", "--check", "--exclude", "**/test/**","."], check = True)
 if result.returncode != 0:
     print("Black found formatting issues!")
     issues_found = True

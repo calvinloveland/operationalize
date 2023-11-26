@@ -34,7 +34,7 @@ class TaskFromGit(TaskDAG):
 
     def initialize_from_url(self):
         to_path = os.path.join(os.path.join(os.getcwd(), "repos"), self.name)
-        _repo = git.Repo.clone_from(self.url, to_path)
+        git.Repo.clone_from(self.url, to_path)
         todo_path = os.path.join(to_path, "TODO.txt")
         self.tasks = []
         if os.path.exists(todo_path):
