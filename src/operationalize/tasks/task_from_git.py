@@ -4,14 +4,7 @@ import git
 from loguru import logger
 
 from operationalize.tasks.task import TaskDAG
-
-
-class TaskSelection(TaskDAG):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.type = "SELECTION"
-        self.options = kwargs.get("options", None)
-        self.workspace = "selection_workspace.html"
+from operationalize.tasks.task_selection import TaskSelection
 
 
 class TaskFromGit(TaskDAG):
