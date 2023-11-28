@@ -54,9 +54,7 @@ class TaskDAG:
     def get_expected_completion_time(self):
         if len(self.dependents) == 0:
             return self.time_limit
-        dependent_time = max(
-            d.get_expected_completion_time() for d in self.dependents
-        )
+        dependent_time = max(d.get_expected_completion_time() for d in self.dependents)
         return self.time_limit + dependent_time
 
     def get_final(self):

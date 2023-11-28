@@ -1,5 +1,6 @@
 import subprocess
 import sys
+
 # Run pytest
 result = subprocess.run(["pytest", "-v"], check=False)
 
@@ -10,13 +11,13 @@ if result.returncode != 0:
     issues_found = True
 
 # Run prospector
-result = subprocess.run(["prospector", "--ignore-paths", "**/test/**"], check = False)
+result = subprocess.run(["prospector", "--ignore-paths", "test/"], check=False)
 if result.returncode != 0:
     print("Prospector found issues!")
     issues_found = True
 
 # Run black
-result = subprocess.run(["black", "--check", "--exclude", "**/test/**","."], check = False)
+result = subprocess.run(["black", "--check", "."], check=False)
 if result.returncode != 0:
     print("Black found formatting issues!")
     issues_found = True

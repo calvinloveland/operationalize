@@ -54,7 +54,7 @@ def test_task_dag_get_final():
     task_dag = TaskDAG()
     another_task_dag = TaskDAG()
     task_dag.append_node(another_task_dag)
-    task_dag.get_final() == another_task_dag
+    assert task_dag.get_final() == another_task_dag
 
 
 def test_task_dag_get_open_tasks():
@@ -82,8 +82,19 @@ def test_task_dag_task_is_ready():
     another_task_dag = TaskDAG()
     task_dag.append_node(another_task_dag)
     task_dag.update_dependencies()
-    assert task_dag.task_is_ready() == True
-    assert another_task_dag.task_is_ready() == False
+    assert task_dag.task_is_ready() is True
+    assert not another_task_dag.task_is_ready()
+
+
+def test_task_completion_with_completion_text():
+    task_dag = TaskDAG(completion_text="This is a test")
+    subsequent_task_dag = TaskDAG()
+    task_dag.append_node(subsequent_task_dag)
+    task_dag.complete(output="This is a test")
+    assert task_dag.completed is True
+    assert task_dag.output == "This is a test"
+    assert subsequent_task_dag.task_is_ready() is True
+    assert "This is a test" in subsequent_task_dag.requirements[0]
 
 
 def test_task_dag_get_task_by_id():
@@ -94,28 +105,17 @@ def test_task_dag_get_task_by_id():
     assert task_dag.get_task_by_id(another_task_dag.id) == another_task_dag
 
 
-def test_task_completion_with_completion_text():
-    task_dag = TaskDAG(completion_text="This is a test")
-    subsequent_task_dag = TaskDAG()
-    task_dag.append_node(subsequent_task_dag)
-    task_dag.complete(output="This is a test")
-    assert task_dag.completed == True
-    assert task_dag.output == "This is a test"
-    assert subsequent_task_dag.task_is_ready() == True
-    assert "This is a test" in subsequent_task_dag.requirements[0]
-
-
 def test_no_open_task():
     task_dag = TaskDAG()
-    assert task_dag.get_next_task() == task_dag
+    assert task_dag.get_next_task() is task_dag
     task_dag.complete(output="This is a test")
-    assert task_dag.get_next_task() == None
+    assert task_dag.get_next_task() is None
     assert task_dag.count_open_tasks() == 0
 
 
 def test_get_task_by_id_miss():
     task_dag = TaskDAG()
-    assert task_dag.get_task_by_id("MISS") == None
+    assert task_dag.get_task_by_id("MISS") is None
 
 
 def test_print_graph():

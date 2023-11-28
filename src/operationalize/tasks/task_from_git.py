@@ -1,7 +1,9 @@
-from operationalize.tasks.task import TaskDAG
-import git
 import os
+
+import git
 from loguru import logger
+
+from operationalize.tasks.task import TaskDAG
 
 
 class TaskSelection(TaskDAG):
