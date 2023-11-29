@@ -21,23 +21,22 @@ file_to_search = filter(lambda x: x not in ignored_files, files_to_search)
 
 for file in file_to_search:
     if any(file.endswith(file_type) for file_type in file_types):
-        with open(os.path.join(root, file), "r", encoding="utf-8") as f:
+        with open(os.path.join(file), "r", encoding="utf-8") as f:
             lines = f.readlines()
         i = 0
         for line in lines:
             i += 1
             if "TODO (" in line:
-                todo_string = line[line.find("TODO")+4 :].strip()
-                todos.append(f"{todo_string} location:{os.path.join(root, file)} line_number:{i}")
+                todo_string = line[line.find("TODO") + 4 :].strip()
+                todos.append(f"{todo_string} location:{file} line_number:{i}")
             if "TODO" in file:
                 todos.append(line.strip())
 
 
 def custom_sorted(todos):
-    return sorted(todos, key=lambda todo:todo.replace(")","~"))
+    return sorted(todos, key=lambda todo: todo.replace(")", "~"))
+
 
 todos = custom_sorted(todos)
 for todo in todos:
     print(todo)
-
-
