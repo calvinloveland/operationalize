@@ -1,4 +1,3 @@
-AAA # todo following this format: https://github.com/todotxt/todo.txt
 (AA) Add ability to save and restart TASKDAGs
 (AB) Add homepage to select a TASKDAG
 (A) Git integration

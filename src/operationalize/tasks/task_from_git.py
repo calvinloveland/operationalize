@@ -23,8 +23,10 @@ class TaskFromGit(TaskDAG):
                 )
             )
         elif self.task_selection == "first":
+            # TODO (B) Implement this
             pass
         elif self.task_selection == "random":
+            # TODO (B) Implement this
             pass
 
     def initialize_from_url(self):
