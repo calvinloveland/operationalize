@@ -1,4 +1,5 @@
 import os
+
 from git import Repo
 
 file_types = [".py", ".html", ".js", ".css", ".md", ".txt"]

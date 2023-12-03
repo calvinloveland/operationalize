@@ -1,4 +1,5 @@
 import pytest
+
 from operationalize.main import app
 
 
