@@ -6,6 +6,7 @@ from flask import request
 from loguru import logger
 
 from operationalize.tasks.software_creation import SoftwareCreation
+from operationalize.project import NEW_PROJECT
 
 app = flask.Flask(
     __name__,
@@ -13,7 +14,7 @@ app = flask.Flask(
     static_url_path="",
 )
 
-projects = {"New Project": None}
+projects = [NEW_PROJECT]
 
 
 @app.route("/")

@@ -20,7 +20,8 @@ dependencies = ["distro",
 "flask",
 "GitPython",
 "prospector",
-"black"]
+"black",
+"lazy_ci"]
 dynamic = ["version"]
 
 [project.scripts]
