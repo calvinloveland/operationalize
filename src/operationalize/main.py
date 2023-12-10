@@ -5,7 +5,6 @@ import flask
 from flask import request
 from loguru import logger
 
-from operationalize.tasks.software_creation import SoftwareCreation
 from operationalize.project import NEW_PROJECT
 
 app = flask.Flask(
