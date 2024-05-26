@@ -123,3 +123,20 @@ def test_print_graph():
     task_dag.append_node(TaskDAG())
     task_dag.print_graph()
     assert True
+
+# Tests for save and load functionality of TASKDAGs
+def test_save_state():
+    task_dag = TaskDAG(name="Test Save")
+    file_path = "test_save_state.json"
+    task_dag.save_state(file_path)
+    with open(file_path, 'r') as file:
+        data = file.read()
+        assert "Test Save" in data
+
+def test_load_state():
+    task_dag = TaskDAG(name="Test Load")
+    file_path = "test_load_state.json"
+    task_dag.save_state(file_path)
+    new_task_dag = TaskDAG()
+    new_task_dag.load_state(file_path)
+    assert new_task_dag.name == "Test Load"
