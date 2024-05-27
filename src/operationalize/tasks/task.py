@@ -2,6 +2,7 @@
 
 import copy
 import json
+import uuid  # Added for unique task_id generation
 from loguru import logger
 
 
@@ -18,7 +19,7 @@ class TaskDAG:
         self.workspace = kwargs.get("workspace", "text_workspace.html")
         self.time_limit = kwargs.get("time_limit", 120)
         self.requirements = kwargs.get("requirements", [])
-        self.task_id = kwargs.get("id", None)  # Renamed from 'id' to 'task_id'
+        self.task_id = kwargs.get("id", uuid.uuid4())  # Initialize task_id with a unique identifier
         self.completion_text = kwargs.get("completion_text", None)
         self.completed = False
         self.assigned_to = None
@@ -29,9 +30,9 @@ class TaskDAG:
         cls = self.__class__
         new_task = cls.__new__(cls)
         memo[id(self)] = new_task
-        for k, value in self.__dict__.items():  # Renamed 'v' to 'value'
+        for k, value in self.__dict__.items():
             setattr(new_task, k, copy.deepcopy(value, memo))
-        new_task.task_id = copy.deepcopy(self.task_id, memo)  # Use 'task_id' instead of 'id'
+        new_task.task_id = uuid.uuid4()  # Generate a new unique task_id for the deepcopy
         return new_task
 
     def to_mermaid_flowchart(self, prepend="flowchart TD\n"):
@@ -40,10 +41,10 @@ class TaskDAG:
         for dependent in self.dependents:
             chart += (
                 str(self.name).replace(" ", "")
-                + str(self.task_id)  # Use 'task_id' instead of 'id'
+                + str(self.task_id)
                 + " --> "
                 + str(dependent.name).replace(" ", "")
-                + str(dependent.task_id)  # Use 'task_id' instead of 'id'
+                + str(dependent.task_id)
                 + "\n"
             )
             chart += dependent.to_mermaid_flowchart(prepend="")
@@ -138,7 +139,7 @@ class TaskDAG:
         """Marks a task as completed and updates dependent tasks."""
         def pretty_print(output):
             if isinstance(output, list):
-                return "\n".join([str(obj) for obj in output])  # Renamed 'o' to 'obj'
+                return "\n".join([str(obj) for obj in output])
             return str(output)
 
         self.completed = True
@@ -155,7 +156,7 @@ class TaskDAG:
     def get_task_by_id(self, task_id):
         """Finds a task by its ID within the DAG."""
         logger.info(f"Looking for task {task_id} in {self.name}")
-        if str(self.task_id) == str(task_id):  # Use 'task_id' instead of 'id'
+        if str(self.task_id) == str(task_id):
             logger.info(f"Found task {self.name}")
             return self
         for dependent in self.dependents:
@@ -166,17 +167,17 @@ class TaskDAG:
 
     def save_state(self, file_path):
         """Saves the current state of the TaskDAG to a file."""
-        with open(file_path, "w", encoding="utf-8") as file:  # Specify encoding
+        with open(file_path, "w", encoding="utf-8") as file:
             json.dump(self.__dict__, file, default=default_serializer, indent=4)
 
     def load_state(self, file_path):
         """Loads the TaskDAG state from a file."""
-        with open(file_path, "r", encoding="utf-8") as file:  # Specify encoding
+        with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
             self.__dict__.update(data)
 
 
-def default_serializer(obj):  # Renamed 'o' to 'obj'
+def default_serializer(obj):
     """Default serializer for objects not serializable by default json code."""
     if isinstance(obj, uuid.UUID):
         return str(obj)
