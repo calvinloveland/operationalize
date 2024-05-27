@@ -31,8 +31,10 @@ class TaskFromGit(TaskDAG):
             # Implementing 'first' task selection strategy
             pass
         elif self.task_selection == "random":
-            # TODO (B) Implement this
-            pass
+            # Implementing 'random' task selection strategy
+            if self.tasks:
+                import random
+                self.tasks = [random.choice(self.tasks)]
 
     def initialize_from_url(self):
         """Clones the Git repository and initializes tasks from TODO.txt."""
@@ -49,3 +51,4 @@ class TaskFromGit(TaskDAG):
         else:
             logger.error(f"Could not find TODO.txt in {to_path}")
             self.tasks.append("Create TODO.txt in this repo")
+
