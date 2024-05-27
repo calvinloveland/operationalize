@@ -6,12 +6,25 @@ from operationalize.tasks.task import TaskDAG
 
 
 class Project:
+    """
+    Represents a project with a set of tasks.
+
+    Attributes:
+        name (str): The name of the project.
+        task_dag (TaskDAG): The task DAG associated with the project.
+    """
     def __init__(self, **kwargs):
         self.name = kwargs.get("name", "Untitled Project")
         self.task_dag = kwargs.get("task_dag", None)
 
     @classmethod
     def configuration_options(cls):
+        """
+        Provides configuration options for the project.
+
+        Returns:
+            dict: A dictionary of configuration options with their types and default values.
+        """
         return {
             "name": {"type": "text", "default": "Untitled Project"},
             "competitive": {"type": "boolean", "default": False},

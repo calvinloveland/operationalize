@@ -1,10 +1,13 @@
+"""Module for defining and managing tasks within a project."""
+
 import copy
-import uuid
 import json
 from loguru import logger
 
 
 class TaskDAG:
+    """Represents a directed acyclic graph (DAG) of tasks within a project."""
+
     def __init__(self, **kwargs):
         self.dependents = kwargs.get("dependents", [])
         assert self.dependents is not None
@@ -15,7 +18,7 @@ class TaskDAG:
         self.workspace = kwargs.get("workspace", "text_workspace.html")
         self.time_limit = kwargs.get("time_limit", 120)
         self.requirements = kwargs.get("requirements", [])
-        self.id = kwargs.get("id", uuid.uuid4())
+        self.task_id = kwargs.get("id", None)  # Renamed from 'id' to 'task_id'
         self.completion_text = kwargs.get("completion_text", None)
         self.completed = False
         self.assigned_to = None
@@ -26,43 +29,48 @@ class TaskDAG:
         cls = self.__class__
         new_task = cls.__new__(cls)
         memo[id(self)] = new_task
-        for k, v in self.__dict__.items():
-            setattr(new_task, k, copy.deepcopy(v, memo))
-        new_task.id = uuid.uuid4()
+        for k, value in self.__dict__.items():  # Renamed 'v' to 'value'
+            setattr(new_task, k, copy.deepcopy(value, memo))
+        new_task.task_id = copy.deepcopy(self.task_id, memo)  # Use 'task_id' instead of 'id'
         return new_task
 
     def to_mermaid_flowchart(self, prepend="flowchart TD\n"):
+        """Generates a Mermaid flowchart representation of the task DAG."""
         chart = prepend
         for dependent in self.dependents:
             chart += (
                 str(self.name).replace(" ", "")
-                + str(self.id)
+                + str(self.task_id)  # Use 'task_id' instead of 'id'
                 + " --> "
                 + str(dependent.name).replace(" ", "")
-                + str(dependent.id)
+                + str(dependent.task_id)  # Use 'task_id' instead of 'id'
                 + "\n"
             )
             chart += dependent.to_mermaid_flowchart(prepend="")
         return chart
 
     def update_dependencies(self):
+        """Updates the dependencies for each task in the DAG."""
         for dependent in self.dependents:
             if self not in dependent.dependencies:
                 dependent.dependencies.append(self)
             dependent.update_dependencies()
 
     def get_expected_completion_time(self):
+        """Calculates the expected completion time for the task DAG."""
         if len(self.dependents) == 0:
             return self.time_limit
         dependent_time = max(d.get_expected_completion_time() for d in self.dependents)
         return self.time_limit + dependent_time
 
     def get_final(self):
+        """Returns the final task in the DAG."""
         if len(self.dependents) == 0:
             return self
         return self.dependents[0].get_final()
 
     def get_open_tasks(self):
+        """Returns a set of open tasks that are ready to be worked on."""
         if self.task_is_ready():
             return set([self])
         tasks = set()
@@ -73,12 +81,15 @@ class TaskDAG:
         return tasks
 
     def count_open_tasks(self):
+        """Counts the number of open tasks in the DAG."""
         return len(self.get_open_tasks())
 
     def assign(self, worker_id):
+        """Assigns a task to a worker."""
         self.assigned_to = worker_id
 
     def task_is_ready(self, worker_id=None):
+        """Checks if a task is ready to be worked on."""
         return (
             not self.completed
             and (self.assigned_to is None or self.assigned_to == worker_id)
@@ -86,6 +97,7 @@ class TaskDAG:
         )
 
     def get_next_task(self, worker_id=None):
+        """Gets the next task that is ready to be worked on by a worker."""
         self.update_dependencies()
         logger.info(f"Getting next task for worker {worker_id}")
         if self.task_is_ready(worker_id):
@@ -100,6 +112,7 @@ class TaskDAG:
         return None
 
     def append_node(self, node):
+        """Appends a node to the DAG."""
         if node == self:
             logger.warning(f"Node is already at the end of graph: {node.name}")
             return
@@ -112,6 +125,7 @@ class TaskDAG:
                     dependent.append_node(node)
 
     def print_graph(self, indent=0):
+        """Prints the graph structure of the DAG."""
         if not self.printed:
             logger.info(" " * indent + self.name)
             self.printed = True
@@ -121,9 +135,10 @@ class TaskDAG:
         self.printed = False
 
     def complete(self, output):
+        """Marks a task as completed and updates dependent tasks."""
         def pretty_print(output):
             if isinstance(output, list):
-                return "\n".join([str(o) for o in output])
+                return "\n".join([str(obj) for obj in output])  # Renamed 'o' to 'obj'
             return str(output)
 
         self.completed = True
@@ -138,8 +153,9 @@ class TaskDAG:
             logger.warning(f"No completion text for {self.name}")
 
     def get_task_by_id(self, task_id):
+        """Finds a task by its ID within the DAG."""
         logger.info(f"Looking for task {task_id} in {self.name}")
-        if str(self.id) == str(task_id):
+        if str(self.task_id) == str(task_id):  # Use 'task_id' instead of 'id'
             logger.info(f"Found task {self.name}")
             return self
         for dependent in self.dependents:
@@ -149,18 +165,19 @@ class TaskDAG:
         return None
 
     def save_state(self, file_path):
-        """Save the current state of the TaskDAG to a file."""
-        with open(file_path, "w") as file:
+        """Saves the current state of the TaskDAG to a file."""
+        with open(file_path, "w", encoding="utf-8") as file:  # Specify encoding
             json.dump(self.__dict__, file, default=default_serializer, indent=4)
 
     def load_state(self, file_path):
-        """Load the TaskDAG state from a file."""
-        with open(file_path, "r") as file:
+        """Loads the TaskDAG state from a file."""
+        with open(file_path, "r", encoding="utf-8") as file:  # Specify encoding
             data = json.load(file)
             self.__dict__.update(data)
 
 
-def default_serializer(o):
-    if isinstance(o, uuid.UUID):
-        return str(o)
-    return o.__dict__
+def default_serializer(obj):  # Renamed 'o' to 'obj'
+    """Default serializer for objects not serializable by default json code."""
+    if isinstance(obj, uuid.UUID):
+        return str(obj)
+    return obj.__dict__

@@ -1,3 +1,5 @@
+"""Main module for the operationalize project web application."""
+
 import os
 import random
 
@@ -18,6 +20,7 @@ projects = [NEW_PROJECT]
 
 @app.route("/")
 def index():
+    """Render the index page with project and worker ID."""
     request_data = request.args
     project_id = request_data.get("project_id", None)
     worker_id = request_data.get("worker_id", None)
@@ -30,7 +33,8 @@ def index():
 
 @app.route("/next_task/<worker_id>/<project_id>")
 def next_task(worker_id, project_id):
-    task = projects[project_id].get_next_task(worker_id)
+    """Assign the next task to the worker based on project ID."""
+    task = projects[int(project_id)].get_next_task(worker_id)
     if task is None:
         return flask.render_template("waiting.html", worker_id=worker_id)
     task.assign(worker_id)
@@ -40,8 +44,9 @@ def next_task(worker_id, project_id):
 
 @app.route("/task/<task_id>", methods=["POST", "GET"])
 def submit_task(task_id):
+    """Process task submission and completion."""
     task = None
-    for project in projects.values():
+    for project in projects:
         task = project.get_task_by_id(task_id)
         if task is not None:
             break
@@ -55,26 +60,27 @@ def submit_task(task_id):
 
 @app.route("/save_taskdag/<project_id>", methods=["POST"])
 def save_taskdag(project_id):
-    project = projects.get(project_id)
+    """Save the current state of the task DAG for a project."""
+    project = projects[int(project_id)]
     if project:
         project.task_dag.save_state(f"{project_id}_taskdag_state.json")
         return "TASKDAG saved successfully", 200
-    else:
-        return "Project not found", 404
+    return "Project not found", 404
 
 
 @app.route("/load_taskdag/<project_id>", methods=["GET"])
 def load_taskdag(project_id):
-    project = projects.get(project_id)
+    """Load the saved state of the task DAG for a project."""
+    project = projects[int(project_id)]
     if project:
         project.task_dag.load_state(f"{project_id}_taskdag_state.json")
         return "TASKDAG loaded successfully", 200
-    else:
-        return "Project not found", 404
+    return "Project not found", 404
 
 
 @logger.catch
 def main():
+    """Run the Flask web application."""
     app.run(debug=True)
 
 

@@ -1,3 +1,5 @@
+"""Module for software creation tasks in the operationalize project."""
+
 from operationalize.tasks.split_work import SplitWork
 from operationalize.tasks.task import TaskDAG
 
@@ -57,6 +59,7 @@ split_work = SplitWork(
 
 
 class Brainstorming(TaskDAG):
+    """Represents the brainstorming phase in software creation."""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Brainstorming"
@@ -74,6 +77,7 @@ class Brainstorming(TaskDAG):
 
 
 class SoftwareCreation(TaskDAG):
+    """Represents the entire software creation process."""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Software Creation"

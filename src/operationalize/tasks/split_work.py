@@ -1,9 +1,13 @@
+"""Module for splitting work into smaller tasks within a project."""
+
 import copy
 
 from operationalize.tasks.task import TaskDAG
 
 
 class SplitWork(TaskDAG):
+    """Represents a task for splitting work into smaller, manageable tasks."""
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = kwargs.get("name", "Split Work")
