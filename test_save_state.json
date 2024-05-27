@@ -1,0 +1,16 @@
+{
+    "dependents": [],
+    "dependencies": [],
+    "name": "Test Save",
+    "type": "TASK WITH NO TYPE",
+    "description": "TASK WITH NO DESCRIPTION",
+    "workspace": "text_workspace.html",
+    "time_limit": 120,
+    "requirements": [],
+    "id": "8838d9c9-c96a-4f98-bfdb-c8b933e48297",
+    "completion_text": null,
+    "completed": false,
+    "assigned_to": null,
+    "printed": false,
+    "output": null
+}

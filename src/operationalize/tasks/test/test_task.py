@@ -124,14 +124,16 @@ def test_print_graph():
     task_dag.print_graph()
     assert True
 
+
 # Tests for save and load functionality of TASKDAGs
 def test_save_state():
     task_dag = TaskDAG(name="Test Save")
     file_path = "test_save_state.json"
     task_dag.save_state(file_path)
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         data = file.read()
         assert "Test Save" in data
+
 
 def test_load_state():
     task_dag = TaskDAG(name="Test Load")

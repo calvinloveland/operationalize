@@ -52,23 +52,26 @@ def submit_task(task_id):
     task.complete(**request_data)
     return "Task completed"
 
+
 @app.route("/save_taskdag/<project_id>", methods=["POST"])
 def save_taskdag(project_id):
     project = projects.get(project_id)
     if project:
-        project.task_dag.save_state(f'{project_id}_taskdag_state.json')
+        project.task_dag.save_state(f"{project_id}_taskdag_state.json")
         return "TASKDAG saved successfully", 200
     else:
         return "Project not found", 404
+
 
 @app.route("/load_taskdag/<project_id>", methods=["GET"])
 def load_taskdag(project_id):
     project = projects.get(project_id)
     if project:
-        project.task_dag.load_state(f'{project_id}_taskdag_state.json')
+        project.task_dag.load_state(f"{project_id}_taskdag_state.json")
         return "TASKDAG loaded successfully", 200
     else:
         return "Project not found", 404
+
 
 @logger.catch
 def main():
