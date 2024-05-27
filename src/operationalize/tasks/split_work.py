@@ -12,7 +12,7 @@ class SplitWork(TaskDAG):
         super().__init__(**kwargs)
         self.name = kwargs.get("name", "Split Work")
         depth = kwargs.get("depth", 3)
-        self.id = kwargs.get("id", "a")
+        self.task_id = kwargs.get("id", "a")
         self.workspace = kwargs.get("workspace", "split_text_workspace.html")
         self.requirements = [
             "Split the work into two complete subtasks.",
@@ -25,12 +25,12 @@ class SplitWork(TaskDAG):
         else:
             split_work_a = SplitWork(
                 depth=depth - 1,
-                id=self.id + "a",
+                id=self.task_id + "a",
                 work_chain=work_chain,
             )
             split_work_b = SplitWork(
                 depth=depth - 1,
-                id=self.id + "b",
+                id=self.task_id + "b",
                 work_chain=work_chain,
             )
             self.dependents = [split_work_a, split_work_b]
@@ -39,7 +39,7 @@ class SplitWork(TaskDAG):
             type="Integrate Work",
             description="Integrate work from other tasks",
             time_limit=120,
-            id=self.id + "i",
+            id=self.task_id + "i",
             completion_text="Integrated work from other tasks:",
         )
         self.append_node(integration)

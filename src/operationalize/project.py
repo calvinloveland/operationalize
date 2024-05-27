@@ -31,6 +31,27 @@ class Project:
             "allow_rework": {"type": "boolean", "default": True},
         }
 
+    def get_task_by_id(self, task_id):
+        """
+        Finds a task by its ID within the project's task DAG.
+
+        Args:
+            task_id (str): The ID of the task to find.
+
+        Returns:
+            TaskDAG: The task with the specified ID, or None if not found.
+        """
+        return self.task_dag.get_task_by_id(task_id)
+
+    def add_task(self, task):
+        """
+        Adds a new task to the project's task DAG.
+
+        Args:
+            task (TaskDAG): The task to add.
+        """
+        self.task_dag.append_node(task)
+
 
 NEW_PROJECT = Project(
     name="New Project",
