@@ -28,7 +28,7 @@ class TaskFromGit(TaskDAG):
                 )
             )
         elif self.task_selection == "first":
-            # TODO (B) Implement this
+            # Implementing 'first' task selection strategy
             pass
         elif self.task_selection == "random":
             # TODO (B) Implement this
@@ -43,6 +43,9 @@ class TaskFromGit(TaskDAG):
             with open(todo_path, "r", encoding="utf-8") as file:
                 for line in file.readlines():
                     self.tasks.append(line.strip())
+            # Implementing 'first' task selection strategy
+            if self.task_selection == "first" and self.tasks:
+                self.tasks = [self.tasks[0]]
         else:
             logger.error(f"Could not find TODO.txt in {to_path}")
             self.tasks.append("Create TODO.txt in this repo")
