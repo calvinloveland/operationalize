@@ -21,7 +21,7 @@ dependencies = ["distro",
 "GitPython",
 "prospector",
 "black",
-"lazy_ci"]
+"lazy_ci @ git+https://github.com/calvinloveland/lazy_ci.git"]
 dynamic = ["version"]
 
 [project.scripts]
@@ -30,6 +30,9 @@ dynamic = ["version"]
 [project.urls]
 "Issue Tracker" = "https://github.com/calvinloveland/operationalize/issues"
 "Repository" = "https://github.com/calvinloveland/operationalize"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.version]
 path = "src/operationalize/__about__.py"
