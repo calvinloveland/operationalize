@@ -18,7 +18,9 @@ class TaskFromGit(TaskDAG):
         self.url = kwargs.get("url", None)
         self.name = self.url.split("/")[-1].replace(".git", "")
         self.task_selection = kwargs.get("task_selection", "select")
-        self.tasks = []  # Initialize tasks to address attribute-defined-outside-init issue
+        self.tasks = (
+            []
+        )  # Initialize tasks to address attribute-defined-outside-init issue
         if self.task_selection == "select":
             self.append_node(
                 TaskSelection(
@@ -34,6 +36,7 @@ class TaskFromGit(TaskDAG):
             # Implementing 'random' task selection strategy
             if self.tasks:
                 import random
+
                 self.tasks = [random.choice(self.tasks)]
 
     def initialize_from_url(self):
@@ -51,4 +54,3 @@ class TaskFromGit(TaskDAG):
         else:
             logger.error(f"Could not find TODO.txt in {to_path}")
             self.tasks.append("Create TODO.txt in this repo")
-

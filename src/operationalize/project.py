@@ -13,6 +13,7 @@ class Project:
         name (str): The name of the project.
         task_dag (TaskDAG): The task DAG associated with the project.
     """
+
     def __init__(self, **kwargs):
         self.name = kwargs.get("name", "Untitled Project")
         self.task_dag = kwargs.get("task_dag", None)

@@ -3,10 +3,11 @@
 import copy
 import json
 import uuid  # Added for unique task_id generation
+
 from loguru import logger
 
 
-class TaskDAG:
+class TaskDAG:  # pylint: disable=too-many-instance-attributes
     """Represents a directed acyclic graph (DAG) of tasks within a project."""
 
     def __init__(self, **kwargs):
@@ -19,7 +20,9 @@ class TaskDAG:
         self.workspace = kwargs.get("workspace", "text_workspace.html")
         self.time_limit = kwargs.get("time_limit", 120)
         self.requirements = kwargs.get("requirements", [])
-        self.task_id = kwargs.get("id", uuid.uuid4())  # Initialize task_id with a unique identifier
+        self.task_id = kwargs.get(
+            "id", uuid.uuid4()
+        )  # Initialize task_id with a unique identifier
         self.completion_text = kwargs.get("completion_text", None)
         self.completed = False
         self.assigned_to = None
@@ -32,7 +35,9 @@ class TaskDAG:
         memo[id(self)] = new_task
         for k, value in self.__dict__.items():
             setattr(new_task, k, copy.deepcopy(value, memo))
-        new_task.task_id = uuid.uuid4()  # Generate a new unique task_id for the deepcopy
+        new_task.task_id = (
+            uuid.uuid4()
+        )  # Generate a new unique task_id for the deepcopy
         return new_task
 
     def to_mermaid_flowchart(self, prepend="flowchart TD\n"):
@@ -137,6 +142,7 @@ class TaskDAG:
 
     def complete(self, output):
         """Marks a task as completed and updates dependent tasks."""
+
         def pretty_print(output):
             if isinstance(output, list):
                 return "\n".join([str(obj) for obj in output])

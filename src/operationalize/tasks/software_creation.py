@@ -58,8 +58,9 @@ split_work = SplitWork(
 )
 
 
-class Brainstorming(TaskDAG):
+class Brainstorming(TaskDAG):  # pylint: disable=too-many-instance-attributes
     """Represents the brainstorming phase in software creation."""
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Brainstorming"
@@ -78,6 +79,7 @@ class Brainstorming(TaskDAG):
 
 class SoftwareCreation(TaskDAG):
     """Represents the entire software creation process."""
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.name = "Software Creation"
