@@ -20,7 +20,7 @@ def test_task_deep_copy():
     task_dag = TaskDAG()
     new_task_dag = deepcopy(task_dag)
     assert new_task_dag.name == task_dag.name
-    assert new_task_dag.id != task_dag.id
+    assert new_task_dag.task_id != task_dag.task_id
 
 
 def test_task_dag_to_mermaid_chart():
@@ -102,7 +102,7 @@ def test_task_dag_get_task_by_id():
     another_task_dag = TaskDAG()
     task_dag.append_node(another_task_dag)
     task_dag.update_dependencies()
-    assert task_dag.get_task_by_id(another_task_dag.id) == another_task_dag
+    assert task_dag.get_task_by_id(another_task_dag.task_id) == another_task_dag
 
 
 def test_no_open_task():
