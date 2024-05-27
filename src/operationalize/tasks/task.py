@@ -1,6 +1,6 @@
 import copy
 import uuid
-
+import json
 from loguru import logger
 
 
@@ -147,3 +147,20 @@ class TaskDAG:
             if task is not None:
                 return task
         return None
+
+    def save_state(self, file_path):
+        """Save the current state of the TaskDAG to a file."""
+        with open(file_path, "w") as file:
+            json.dump(self.__dict__, file, default=default_serializer, indent=4)
+
+    def load_state(self, file_path):
+        """Load the TaskDAG state from a file."""
+        with open(file_path, "r") as file:
+            data = json.load(file)
+            self.__dict__.update(data)
+
+
+def default_serializer(o):
+    if isinstance(o, uuid.UUID):
+        return str(o)
+    return o.__dict__
