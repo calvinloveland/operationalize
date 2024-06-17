@@ -3,7 +3,7 @@
 x (AB) Create VSCODE extension
 (AA) Git integration
 (A) Add a cool robot voice
-(A) Add ability to rate previous work
+x (A) Add ability to rate previous work
 (A) Add ability to select the next item in the TASKDAG
 (A) Add operationlize^2 where you can work from a todo list (like this one)
 (B) Add ability to select roles (PM Tester QA...)

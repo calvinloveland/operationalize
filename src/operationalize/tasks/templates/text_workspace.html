@@ -49,7 +49,9 @@
             <option value="swift">Swift</option>
             <option value="xml">XML</option>
         </select>
-
+        <!-- Rating input field added for task submission -->
+        <label for="task-rating">Rate this task:</label>
+        <input type="number" id="task-rating" name="task-rating" min="1" max="5" required>
         <button type="button" class="btn btn-primary" onclick="submitWorkspace()">Submit</button>
     </div>
 </div>

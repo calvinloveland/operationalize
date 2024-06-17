@@ -188,3 +188,20 @@ def default_serializer(obj):
     if isinstance(obj, uuid.UUID):
         return str(obj)
     return obj.__dict__
+
+
+class RatingTask(TaskDAG):
+    """Represents a task for rating the output of a completed task."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ratings = []
+
+    def submit_rating(self, rating):
+        """Submits a rating for the task."""
+        self.ratings.append(rating)
+
+    def store_ratings(self):
+        """Stores the ratings in a JSON file."""
+        with open("ratings.json", "w") as file:
+            json.dump(self.ratings, file, indent=4)

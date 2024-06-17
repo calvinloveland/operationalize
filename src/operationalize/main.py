@@ -58,6 +58,21 @@ def submit_task(task_id):
     return "Task completed"
 
 
+@app.route("/rate_task/<task_id>", methods=["POST"])
+def rate_task(task_id):
+    """Rate a completed task."""
+    rating = request.json.get("rating")
+    task = None
+    for project in projects:
+        task = project.get_task_by_id(task_id)
+        if task is not None:
+            break
+    if task is None or not hasattr(task, "submit_rating"):
+        return "Task not found or not rateable", 404
+    task.submit_rating(rating)
+    return "Rating submitted successfully"
+
+
 @app.route("/save_taskdag/<project_id>", methods=["POST"])
 def save_taskdag(project_id):
     """Save the current state of the task DAG for a project."""
