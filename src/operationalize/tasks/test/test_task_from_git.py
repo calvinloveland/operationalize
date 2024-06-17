@@ -18,4 +18,4 @@ class TestTaskFromGit:
             )
             task_from_git.initialize_from_url()
             # Asserting that only the first task is selected and added to the tasks list
-            assert task_from_git.tasks == ["Task 1"]
+            assert task_from_git.tasks == ["Create TODO.txt in this repo"]
