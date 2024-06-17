@@ -189,6 +189,7 @@ def default_serializer(obj):
         return str(obj)
     return obj.__dict__
 
+
 class RatingTask(TaskDAG):
     """Represents a task for rating the output of a completed task."""
 

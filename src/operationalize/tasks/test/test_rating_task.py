@@ -1,5 +1,7 @@
 import unittest
+
 from operationalize.tasks.task import RatingTask
+
 
 class TestRatingTask(unittest.TestCase):
 

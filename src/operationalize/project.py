@@ -3,7 +3,7 @@ The Project class is a container for a set of tasks that make up a project.
 The Project class is responsible for managing the tasks that are part of the project.
 """
 
-from operationalize.tasks.task import TaskDAG, RatingTask
+from operationalize.tasks.task import RatingTask, TaskDAG
 
 
 class Project:
@@ -55,7 +55,9 @@ class Project:
         self.task_dag.append_node(task)
         # Automatically append a RatingTask instance after each rateable task
         if isinstance(task, TaskDAG) and not isinstance(task, RatingTask):
-            rating_task = RatingTask(name=f"Rate {task.name}", description=f"Rate the output of {task.name}")
+            rating_task = RatingTask(
+                name=f"Rate {task.name}", description=f"Rate the output of {task.name}"
+            )
             self.task_dag.append_node(rating_task)
 
 
