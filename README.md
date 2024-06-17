@@ -18,10 +18,12 @@ To save the current state of a TASKDAG, use the `/save_taskdag/<project_id>` end
 
 To load a previously saved TASKDAG, use the `/load_taskdag/<project_id>` endpoint. This will load the TASKDAG's state from the file named `<project_id>_taskdag_state.json`, allowing you to resume your work from where you left off.
 
-## Rating Tasks
+## Running Unit Tests
 
-OPERATIONALIZE now allows users to rate the output of completed tasks. After completing a task, users can submit a rating for the task's output, providing valuable feedback on the quality of work. Here's how to rate a task:
+To ensure the quality and functionality of the OPERATIONALIZE framework, contributors are encouraged to run unit tests, especially after making changes or adding new features. Here's how to run the unit tests:
 
-### Submitting a Rating
+1. Navigate to the root directory of the OPERATIONALIZE project.
+2. Run the command `pytest` to execute all available unit tests.
+3. To run specific tests, use the command `pytest path/to/test_file.py`.
 
-To submit a rating for a completed task, navigate to the task's submission page and use the rating input field to select a rating from 1 to 5. Once you have selected your rating, submit it along with your task output. Your rating will be stored and used to improve the quality of future tasks.
+This includes the new tests for rating tasks, which verify the functionality of the `RatingTask` class and the `/rate_task` endpoint. Running these tests ensures that the rating feature works as expected and handles errors properly.
