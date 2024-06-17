@@ -1,6 +1,7 @@
 """Module for creating tasks from a Git repository."""
 
 import os
+import random
 
 import git
 from loguru import logger
@@ -35,7 +36,6 @@ class TaskFromGit(TaskDAG):
         elif self.task_selection == "random":
             # Implementing 'random' task selection strategy
             if self.tasks:
-                import random
 
                 self.tasks = [random.choice(self.tasks)]
 
